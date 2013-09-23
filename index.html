@@ -17,10 +17,12 @@ svg {
 
 .g-ESPN{
 	fill: orange;
+	font-size: 15px;
 }
 
 .g-NETWORK{
 	fill: grey;
+	font-size: 11px;
 }
 
 .texth1 {
@@ -148,7 +150,17 @@ svg {
 		.attr("y",12)
 		.text("ESPN");
 
-	//console.log(prices)
+	svg.append("g").selectAll(".bar")
+		.data(prices)
+		.enter()
+		.append("g")
+		.attr("class","g-NETWORK")
+		.append("text")
+		.attr("id", function(d) {return d.Network.split(" ").join("-") })
+		.text(function(d) {return x(d.Network) + 20;})
+		.attr("x", function(d) {return x(d.Network) + 20; })
+		.attr("y", function(d) {return y(d.X2013)- 10;})
+		.attr("transform", "translate(" + -100 + ",0)");
 	
 	});	
 	
