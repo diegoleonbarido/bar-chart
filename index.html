@@ -41,6 +41,12 @@ svg {
 
 }
 
+.bottomaxis {
+	
+	size: 1px;
+	color: black;
+} 
+
 .axis line {
     fill: none;
     stroke: black;
@@ -161,6 +167,50 @@ svg {
 		.attr("x", function(d) {return x(d.Network) + 20; })
 		.attr("y", function(d) {return y(d.X2013)- 10;})
 		.attr("transform", "translate(" + -100 + ",0)");
+		
+	// adds an axis line along the bottom
+	svg.append("g")
+		.attr("class","bottomaxis")
+		.call(bottomyAxis)
+		.attr("class","y axis bottomaxis");
+		
+	// adds the price for the ESPN network to the svg, changes based on csv file
+	svg.append("text")
+		.text(f2(prices.filter(function(d) {return d.Network =="ESPN"}) [0].X2013)  )
+		.attr("x", xpos)
+		.attr("y", 28)
+		.attr("class", "g-NETWORK");
+		
+	//adds the "per subscriber" to the svg
+	svg.append("text")
+		.text("per subscriber")
+		.attr("x", xpos)
+		.attr("y", 41)
+		.attr("class", "g-NETWORK");
+		
+		d3.select("#C-SPAN")
+		   .attr("x", 203);
+
+		d3.select("#The-Weather-Channel")
+		   .attr("x", 355);
+
+		d3.select("#Comedy-Central")
+		    .attr("x", 535);
+
+	 	d3.select("#MSNBC")
+		   	.attr("x", 675);
+
+		 d3.select("#Bravo")
+		      .attr("x", 762)
+		      .attr("y", 670);
+
+		 d3.select("#TBS")
+		      .attr("x", 900)
+		      .attr("y", 643);
+
+		d3.select("#TNT")
+		  .attr("x", 938)
+		  .attr("y", 555);
 	
 	});	
 	
