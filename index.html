@@ -145,7 +145,7 @@ svg {
 		.attr("x",function(d,i) {return i*(width/prices.length);})
 		.attr("class","bar")
 		.classed("g-ESPN",function(d){return d.Network == "ESPN"})
-		.classed("g-NETWORK",function(d){return networks.index0f(d.Network) >= 0;});
+		.classed("g-NETWORK",function(d){return networks.indexOf(d.Network) >= 0;});
 
 		//storing the x positioning into a var for use in upcoming functions
 		var xpos = 930;
