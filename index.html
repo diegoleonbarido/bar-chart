@@ -22,7 +22,7 @@ svg {
 
 .g-NETWORK{
 	fill: grey;
-	font-size: 11px;
+	font-size: 15px;
 }
 
 .texth1 {
@@ -41,10 +41,10 @@ svg {
 
 }
 
-.bottomaxis {
+/*.bottomyaxis {
 	size: 1px;
 	color: black;
-} 
+} */
 
 .axis line {
     fill: none;
@@ -69,15 +69,15 @@ svg {
     <body>
 	
         <script type="text/javascript">
-         d3.select("body").append("h1").attr("class","texth1").text("To Protect Its Empire, ESPN Stays on Offense")
+         d3.select("body").append("h1").attr("class","texth1").text("To Protect Its Empire, ESPN Stays on Offense With Game")
 		d3.select("body").append("h2").attr("class","texth2").text("ESPN’s average monthly price is more than four times the monthly fee for the next most expensive national network.")
 		d3.select("body").append("h2").attr("class","texth2").text("Cost Per Day TV Subscriber per Month")
 
-		var margin = {top: 20, right: 10, bottom: 20, left: 10};
+		var margin = {top: 0, right: 100, bottom: 40, left: 0};
 
-		var width = 800 - margin.left - margin.right,
-			height = 350 - margin.top - margin.bottom;
-		barPad = 2;
+		var width = 1024 - margin.left - margin.right,
+			height = 768 - margin.top - margin.bottom;
+		    barPad = 2;
 
 		var svg = d3.select("body").append("svg")
 		    .attr("width", width + margin.left + margin.right)
@@ -97,8 +97,8 @@ svg {
     d3.csv("subscription-prices.csv", function(err,prices) {
 	
 		var formatCount = d3.format(",.0f");
-			f = d3.format("$.0f"),
-			f2 = d3.format("$.2f");
+							f = d3.format("$.0f"),
+							f2 = d3.format("$.2f");
 	
 	// recasts d.2013 as a number, not a string
 	prices.forEach(function(d) {
@@ -113,20 +113,22 @@ svg {
 	var networks = ["C-SPAN", "The Weather Channel", "Comedy Central", "MSNBC","Bravo", "TBS", "ESPN2","TNT"];
 	
 	var y = d3.scale.linear()
-		.domain([0,5.6])
-		.range([height,0]);
+				.domain([0,5.6])
+				.range([height,0]);
 		
+	//Adds black box and all values	
 	var x = d3.scale.ordinal()
 		.domain(prices.map(function(d){return d.Network}))
-		.rangeBands ([0,width],0.5);
+		.rangeBands ([0,width], 0.5);
 		
 	//Adding the y-AXis	
 	var yAxis = d3.svg.axis()
-		             .scale(y)
-				     .tickFormat(f)
-				     .tickValues([0,1,2,3,4,5])
-		             .orient("right");
+				             .scale(y)
+						     .tickFormat(f)
+						     .tickValues([0,1,2,3,4,5])
+				             .orient("right");
 	
+	//Adds values to all columns
 	var bottomyAxis = d3.svg.axis()
 					.scale(y)
 					.tickValues([0])
@@ -138,19 +140,19 @@ svg {
 		.data(prices)
 		.enter()
 		.append("rect")
-		.attr("width", width / prices.length - barPad)
 		.attr("height", function(d) {return height - y(d.X2013); })
+		.attr("width", width / prices.length - barPad)
 		.attr("y", function(d)  {return y(d.X2013) })
 		.attr("x",function(d,i) {return i*(width/prices.length);})
 		.attr("class","bar")
 		.classed("g-ESPN",function(d){return d.Network == "ESPN"})
 		.classed("g-NETWORK",function(d){return networks.indexOf(d.Network) >= 0;});
-
+	
 		//storing the x positioning into a var for use in upcoming functions
 		var xpos = 930;
 	
 	svg.append("text")
-	.attr("class","g-label")
+		.attr("class","g-label")
 		.attr("x",xpos)
 		.attr("y",12)
 		.text("ESPN");
@@ -164,14 +166,20 @@ svg {
 		.attr("id", function(d) {return d.Network.split(" ").join("-") })
 		.text(function(d) {return x(d.Network) + 20;})
 		.attr("x", function(d) {return x(d.Network) + 20; })
-		.attr("y", function(d) {return y(d.X2013)- 10;})
+		.attr("y", function(d) {return y(d.X2013) - 10;})
 		.attr("transform", "translate(" + -100 + ",0)");
 		
-	// adds an axis line along the bottom
+	//adds y axis and sets it to the right
 	svg.append("g")
-		.attr("class","bottomaxis")
-		.call(bottomyAxis)
-		.attr("class","y axis bottomaxis");
+		.attr("class", "y axis")
+		.attr("transform", "translate(" + width +" ,0)")
+		.call(yAxis);
+		
+	// adds an axis line along the bottom - MAKES EVERYTHING GO BLACK
+	// svg.append("g")
+	// 	.attr("class","bottomaxis")
+	// 	.call(bottomyAxis)
+	// 	.attr("class","y axis bottomaxis");
 		
 	// adds the price for the ESPN network to the svg, changes based on csv file
 	svg.append("text")
