@@ -41,6 +41,11 @@ svg {
 
 }
 
+.domain {
+	
+	display: none;
+}
+
 /*.bottomyaxis {
 	size: 1px;
 	color: black;
@@ -164,7 +169,7 @@ svg {
 		.attr("class","g-NETWORK")
 		.append("text")
 		.attr("id", function(d) {return d.Network.split(" ").join("-") })
-		.text(function(d) {return x(d.Network) + 20;})
+		// .text(function(d) {return x(d.Network) + 20;})
 		.attr("x", function(d) {return x(d.Network) + 20; })
 		.attr("y", function(d) {return y(d.X2013) - 10;})
 		.attr("transform", "translate(" + -100 + ",0)");
