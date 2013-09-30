@@ -108,6 +108,18 @@ var y = d3.scale.linear()
 //Loading data into D3		
 d3.csv("subscription-prices.csv", function(prices) {
 
+ var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .tickFormat(f)
+                    .tickValues([0,1,2,3,4,5])
+                    .orient("right");
+
+  // adds y axis and sets it to the right
+                svg.append("g")
+                    .attr("class", "y axis")
+                    .attr("transform", "translate(" + width + ",0)" )
+                    .call(yAxis);               
+
   var x = d3.scale.linear()
     .domain([0, prices.length]) 
     .range([0, width]);  
