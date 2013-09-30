@@ -12,16 +12,16 @@ svg {
 }
 
 .bar {
-	fill:#ddd;
+	fill:grey;
 }
 
-.g-ESPN{
+.espn{
 	fill: orange;
-	font-size: 15px;
+	font-size: 20px;
 }
 
-.g-NETWORK{
-	fill: grey;
+.network{
+	fill: blue;
 	font-size: 15px;
 }
 
@@ -62,175 +62,105 @@ svg {
     font-size: 11px;
 }
 
+svg {
+  border:1px solid white;
+}
+
 </style>
 
 
-    <head>
-        <meta charset="utf-8">
-        <title>D3 Test</title>
-        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    </head>
+<head>
+    <meta charset="utf-8">
+    <title>D3 Test</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
 
-    <body>
-	
-        <script type="text/javascript">
-         d3.select("body").append("h1").attr("class","texth1").text("To Protect Its Empire, ESPN Stays on Offense With Game")
-		d3.select("body").append("h2").attr("class","texth2").text("ESPN’s average monthly price is more than four times the monthly fee for the next most expensive national network.")
-		d3.select("body").append("h2").attr("class","texth2").text("Cost Per Day TV Subscriber per Month")
+<body>
 
-		var margin = {top: 0, right: 100, bottom: 40, left: 0};
+  <h2>To Protect its Empire, ESPN Stays on Offense.</h2>
 
-		var width = 1024 - margin.left - margin.right,
-			height = 768 - margin.top - margin.bottom;
-		    barPad = 2;
+    <script type="text/javascript">
 
-		var svg = d3.select("body").append("svg")
-		    .attr("width", width + margin.left + margin.right)
-		    .attr("height", height + margin.top + margin.bottom)
-		    .append("g")
-		    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-		
-		//The code below simply makes a rectangle
-			//var testRectangle = svg.append("rect")
-			  //  .attr("x", 20)
-			    //.attr("y", 100)
-			    //.attr("height", 50)
-			    //.attr("width", 200)
-			    //.attr("class", "testbar");
-			
-	//Loading data into D3		
-    d3.csv("subscription-prices.csv", function(err,prices) {
-	
-		var formatCount = d3.format(",.0f");
-							f = d3.format("$.0f"),
-							f2 = d3.format("$.2f");
-	
-	// recasts d.2013 as a number, not a string
-	prices.forEach(function(d) {
-		
-		d.X2013 = +d.X2013;
-	    });
-	
-	prices.sort(function(a,b) {
-		return a.X2013 - b.X2013;
-		});
-	
-	var networks = ["C-SPAN", "The Weather Channel", "Comedy Central", "MSNBC","Bravo", "TBS", "ESPN2","TNT"];
-	
-	var y = d3.scale.linear()
-				.domain([0,5.6])
-				.range([height,0]);
-		
-	//Adds black box and all values	
-	var x = d3.scale.ordinal()
-		.domain(prices.map(function(d){return d.Network}))
-		.rangeBands ([0,width], 0.5);
-		
-	//Adding the y-AXis	
-	var yAxis = d3.svg.axis()
-				             .scale(y)
-						     .tickFormat(f)
-						     .tickValues([0,1,2,3,4,5])
-				             .orient("right");
-	
-	//Adds values to all columns
-	var bottomyAxis = d3.svg.axis()
-					.scale(y)
-					.tickValues([0])
-					.tickSize(width)
-					.orient("right");
-	
-		
-	var bar = svg.selectAll(".bar")
-		.data(prices)
-		.enter()
-		.append("rect")
-		.attr("height", function(d) {return height - y(d.X2013); })
-		.attr("width", width / prices.length - barPad)
-		.attr("y", function(d)  {return y(d.X2013) })
-		.attr("x",function(d,i) {return i*(width/prices.length);})
-		.attr("class","bar")
-		.classed("g-ESPN",function(d){return d.Network == "ESPN"})
-		.classed("g-NETWORK",function(d){return networks.indexOf(d.Network) >= 0;});
-	
-		//storing the x positioning into a var for use in upcoming functions
-		var xpos = 930;
-	
-	svg.append("text")
-		.attr("class","g-label")
-		.attr("x",xpos)
-		.attr("y",12)
-		.text("ESPN");
+  var margin = {top: 0, right: 100, bottom: 40, left: 0};
 
-	svg.append("g").selectAll(".bar")
-		.data(prices)
-		.enter()
-		.append("g")
-		.attr("class","g-NETWORK")
-		.append("text")
-		.attr("id", function(d) {return d.Network.split(" ").join("-") })
-		// .text(function(d) {return x(d.Network) + 20;})
-		.attr("x", function(d) {return x(d.Network) + 20; })
-		.attr("y", function(d) {return y(d.X2013) - 10;})
-		.attr("transform", "translate(" + -100 + ",0)");
-		
-	//adds y axis and sets it to the right
-	svg.append("g")
-		.attr("class", "y axis")
-		.attr("transform", "translate(" + width +" ,0)")
-		.call(yAxis);
-		
-	// adds an axis line along the bottom - MAKES EVERYTHING GO BLACK
-	// svg.append("g")
-	// 	.attr("class","bottomaxis")
-	// 	.call(bottomyAxis)
-	// 	.attr("class","y axis bottomaxis");
-		
-	// adds the price for the ESPN network to the svg, changes based on csv file
-	svg.append("text")
-		.text(f2(prices.filter(function(d) {return d.Network =="ESPN"}) [0].X2013)  )
-		.attr("x", xpos)
-		.attr("y", 28)
-		.attr("class", "g-NETWORK");
-		
-	//adds the "per subscriber" to the svg
-	svg.append("text")
-		.text("per subscriber")
-		.attr("x", xpos)
-		.attr("y", 41)
-		.attr("class", "g-NETWORK");
-		
-		d3.select("#C-SPAN")
-		   .attr("x", 203);
+    var width = 1024 - margin.left - margin.right,
+      height = 768 - margin.top - margin.bottom;
+        barPad = 2;
 
-		d3.select("#The-Weather-Channel")
-		   .attr("x", 355);
+var networks = ["C-SPAN", "The Weather Channel", "Comedy Central", "MSNBC","Bravo", "TBS", "ESPN2","TNT"];
 
-		d3.select("#Comedy-Central")
-		    .attr("x", 535);
 
-	 	d3.select("#MSNBC")
-		   	.attr("x", 675);
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		 d3.select("#Bravo")
-		      .attr("x", 762)
-		      .attr("y", 670);
+var formatCount = d3.format(",.0f");
+          f = d3.format("$.0f"),
+          f2 = d3.format("$.2f");
 
-		 d3.select("#TBS")
-		      .attr("x", 900)
-		      .attr("y", 643);
-
-		d3.select("#TNT")
-		  .attr("x", 938)
-		  .attr("y", 555);
+var y = d3.scale.linear()
+    .domain([0,5.6])
+    .range([0, height]);
+ 
 	
-	});	
+//Loading data into D3		
+d3.csv("subscription-prices.csv", function(prices) {
+
+  var x = d3.scale.linear()
+    .domain([0, prices.length]) 
+    .range([0, width]);  
+
+  prices.forEach(function(row) {
+    row.X2013 = +row.X2013;
+  });
+
+  prices.sort(function(a,b) {
+    return a.X2013 - b.X2013;
+  });
+
+  var barGroup = svg.selectAll(".bar")
+      .data(prices)
+    .enter()
+    //Appending a group "g"
+      .append("g")
+      .classed("bar",true)
+      // Inside the group we can't have x and y, but we can use the same code and "translate" it to what it likes which are "transform and translate"
+      .attr("transform", function(d,i) { return "translate(" + x(i) + "," + (height - y(d.X2013)) + ")"; })
+
+
+   barGroup.append("rect")
+      .attr("width", 1)
+      .attr("height", function(d) { return y(d.X2013) })
+      .classed("espn", function(d) {return d.Network == "ESPN"})
+      .classed("network", function(d) {return networks.indexOf(d.Network) != -1 });
+
+  barGroup.append("text")
+      .text(function(d) {
+
+    if (d.Network == "ESPN") {
+      return d.Network
+    }
+
+    if (networks.indexOf(d.Network) != -1) {
+      return d.Network
+    }
+
+      });
+
+//   var espn = prices.filter(function(d) { return d.Network == "ESPN"; });
+//   console.log(espn);
+
+// svg.append("text")
+// .attr("class", "g-label")
+// .attr("x", 530)
+// .attr("y", 30)
+// .text("ESPN");
+
+});	
 	
-	d3.select("body").append("h2").attr("class","texth3").text("1.If ESPN is an outlier in terms of price, is it also an outlier in terms of viewership? ")
-	d3.select("body").append("h2").attr("class","texth3").text("2.How has the price of the top five channels (in terms of viewership) changed over time?")
-    d3.select("body").append("h2").attr("class","texth3").text("3. How does customer satisfaction vary according to price?")
-			
-		
-        </script>
-    </body>
+
+    </script>
+</body>
 </html>
