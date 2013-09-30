@@ -26,7 +26,8 @@ svg {
 }
 
 .texth1 {
-	font-size: 20px;	
+	font-size: 20px;
+  fill: black;	
 
 }
 
@@ -68,7 +69,6 @@ svg {
 
 </style>
 
-
 <head>
     <meta charset="utf-8">
     <title>D3 Test</title>
@@ -81,9 +81,9 @@ svg {
 
     <script type="text/javascript">
 
-  var margin = {top: 0, right: 100, bottom: 40, left: 0};
+  var margin = {top: 20, right: 100, bottom: 40, left: 0};
 
-    var width = 1024 - margin.left - margin.right,
+    var width = 1250 - margin.left - margin.right,
       height = 768 - margin.top - margin.bottom;
         barPad = 2;
 
@@ -131,7 +131,7 @@ d3.csv("subscription-prices.csv", function(prices) {
 
 
    barGroup.append("rect")
-      .attr("width", 1)
+      .attr("width", 3)
       .attr("height", function(d) { return y(d.X2013) })
       .classed("espn", function(d) {return d.Network == "ESPN"})
       .classed("network", function(d) {return networks.indexOf(d.Network) != -1 });
@@ -147,7 +147,8 @@ d3.csv("subscription-prices.csv", function(prices) {
       return d.Network
     }
 
-      });
+      })
+     .attr("class","texth1") ;
 
 //   var espn = prices.filter(function(d) { return d.Network == "ESPN"; });
 //   console.log(espn);
